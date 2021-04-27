@@ -10,16 +10,21 @@ namespace PathingGameConsole
     {
         private bool marked;
         private bool player;
+        private bool masked;
 
         private bool canUP;
         private bool canDOWN;
         private bool canLEFT;
         private bool canRIGHT;
 
-        public Point() 
+        public Point(bool masking) 
         {
             marked = false;
             player = false;
+            if (masking)
+                masked = true;
+            else
+                masked = false;
 
             canUP = true;
             canDOWN= true;
@@ -37,6 +42,12 @@ namespace PathingGameConsole
         {
             get { return this.player; }
             set { this.player = value; }
+        }
+
+        public bool Masked
+        {
+            get { return this.masked; }
+            set { this.masked = value; }
         }
 
         public bool UP
@@ -78,6 +89,10 @@ namespace PathingGameConsole
             if (this.player)
             {
                 return "#";
+            }
+            if (this.masked)
+            {
+                return "\u2588";
             }
             if (!this.Marked)
             {

@@ -13,10 +13,12 @@ namespace PathingGameConsole
             Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
             Console.OutputEncoding = Encoding.UTF8;
             Console.WriteLine("This is the best test");
-            Board grid = new Board(50, 50);
-            grid.GeneratePath(0, 0, 25, 25);
+            Board grid = new Board(50, 50, true);
+            grid.GeneratePath(0, 0, 49, 49);
+            grid.GenerateRandoms(1500);
             Console.SetCursorPosition(0, 0);
             Console.WriteLine(grid);
+            Console.WriteLine("\n\n\n W, A, S, D to move. ESC to exit.");
             ConsoleKeyInfo input;
             while ((input = Console.ReadKey(true)).Key != ConsoleKey.Escape)
             {

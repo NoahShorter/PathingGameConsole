@@ -10,13 +10,87 @@ namespace PathingGameConsole
     {
         private LinkedList<int[]> mPath;
         private int[] playerLocation;
+        private bool masking;
 
-        public Board(int sizeX, int sizeY) :
-            base(sizeX, sizeY)
+        public Board(int sizeX, int sizeY, bool masking) :
+            base(sizeX, sizeY, masking)
         {
             mPath = new LinkedList<int[]>();
             mGrid[0, 0].Player = true;
             playerLocation = new int[] { 0, 0 };
+            this.masking = masking;
+            if (this.masking)
+                unMaskAroundPoint(playerLocation);
+        }
+
+        private void unMaskAroundPoint(int[] point)
+        {
+            if (pointExsist(point))
+            {
+                int x = point[0];
+                int y = point[1];
+
+                mGrid[x , y].Masked = false;
+
+                if (pointExsist(new int[] { x - 1, y }))
+                    mGrid[x - 1, y].Masked = false;
+
+                if (pointExsist(new int[] { x - 1, y + 1 }))
+                    mGrid[x - 1, y + 1].Masked = false;
+
+                if (pointExsist(new int[] { x, y + 1 }))
+                    mGrid[x, y + 1].Masked = false;
+
+                if (pointExsist(new int[] { x + 1, y + 1 }))
+                    mGrid[x + 1, y + 1].Masked = false;
+
+                if (pointExsist(new int[] { x + 1, y }))
+                    mGrid[x + 1, y].Masked = false;
+
+                if (pointExsist(new int[] { x + 1, y - 1 }))
+                    mGrid[x + 1, y - 1].Masked = false;
+
+                if (pointExsist(new int[] { x, y - 1 }))
+                    mGrid[x, y - 1].Masked = false;
+
+                if (pointExsist(new int[] { x - 1, y - 1}))
+                    mGrid[x - 1, y - 1].Masked = false;
+            }
+        }
+
+        private void maskAroundPoint(int[] point)
+        {
+            if (pointExsist(point))
+            {
+                int x = point[0];
+                int y = point[1];
+
+                mGrid[x , y].Masked = true;
+
+                if (pointExsist(new int[] { x - 1, y }))
+                    mGrid[x - 1, y].Masked = true;
+
+                if (pointExsist(new int[] { x - 1, y + 1 }))
+                    mGrid[x - 1, y + 1].Masked = true;
+
+                if (pointExsist(new int[] { x, y + 1 }))
+                    mGrid[x, y + 1].Masked = true;
+
+                if (pointExsist(new int[] { x + 1, y + 1 }))
+                    mGrid[x + 1, y + 1].Masked = true;
+
+                if (pointExsist(new int[] { x + 1, y }))
+                    mGrid[x + 1, y].Masked = true;
+
+                if (pointExsist(new int[] { x + 1, y - 1 }))
+                    mGrid[x + 1, y - 1].Masked = true;
+
+                if (pointExsist(new int[] { x, y - 1 }))
+                    mGrid[x, y - 1].Masked = true;
+
+                if (pointExsist(new int[] { x - 1, y - 1 }))
+                    mGrid[x - 1, y - 1].Masked = true;
+            }
         }
 
         public void movePlayer(int direction)
@@ -28,7 +102,11 @@ namespace PathingGameConsole
                     {
                         mGrid[goLEFT(playerLocation)[0], goLEFT(playerLocation)[1]].Player = true;
                         mGrid[playerLocation[0], playerLocation[1]].Player = false;
+                        if (masking) 
+                            maskAroundPoint(playerLocation);
                         playerLocation = goLEFT(playerLocation);
+                        if (masking)
+                            unMaskAroundPoint(playerLocation);
                     }
                     break;
                 case 1:
@@ -36,7 +114,11 @@ namespace PathingGameConsole
                     {
                         mGrid[goUP(playerLocation)[0], goUP(playerLocation)[1]].Player = true;
                         mGrid[playerLocation[0], playerLocation[1]].Player = false;
+                        if (masking)
+                            maskAroundPoint(playerLocation);
                         playerLocation = goUP(playerLocation);
+                        if (masking)
+                            unMaskAroundPoint(playerLocation);
                     }
                     break;
                 case 2:
@@ -44,7 +126,11 @@ namespace PathingGameConsole
                     {
                         mGrid[goRIGHT(playerLocation)[0], goRIGHT(playerLocation)[1]].Player = true;
                         mGrid[playerLocation[0], playerLocation[1]].Player = false;
+                        if (masking)
+                            maskAroundPoint(playerLocation);
                         playerLocation = goRIGHT(playerLocation);
+                        if (masking)
+                            unMaskAroundPoint(playerLocation);
                     }
                     break;
                 case 3:
@@ -52,7 +138,11 @@ namespace PathingGameConsole
                     {
                         mGrid[goDOWN(playerLocation)[0], goDOWN(playerLocation)[1]].Player = true;
                         mGrid[playerLocation[0], playerLocation[1]].Player = false;
+                        if (masking)
+                            maskAroundPoint(playerLocation);
                         playerLocation = goDOWN(playerLocation);
+                        if (masking)
+                            unMaskAroundPoint(playerLocation);
                     }
                     break;
             }
@@ -360,6 +450,18 @@ namespace PathingGameConsole
                 markPos(currentPoint);
 
 
+            }
+        }
+
+        public void GenerateRandoms(int number)
+        {
+            Random rd = new Random();
+
+            for(int ii = 0; ii < number; ++ii)
+            {
+                int x = rd.Next(0, getXLength());
+                int y = rd.Next(0, getYLength());
+                mGrid[x, y].Marked = true;
             }
         }
 

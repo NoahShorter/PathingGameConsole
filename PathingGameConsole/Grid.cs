@@ -8,14 +8,14 @@ namespace PathingGameConsole
 {
     public class Grid
     {
-        public Grid(int sizeX, int sizeY)
+        public Grid(int sizeX, int sizeY, bool masking)
         {
             mGrid = new Point[sizeX, sizeY];
             for(int ii = 0; ii < sizeX; ++ii)
             {
                 for(int jj = 0; jj < sizeY; ++jj)
                 {
-                    mGrid[ii, jj] = new Point();
+                    mGrid[ii, jj] = new Point(masking);
                 }
             }
         }
